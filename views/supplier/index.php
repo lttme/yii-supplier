@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use yii\grid\CheckboxColumn;
 use yii\bootstrap4\Modal;
 use yii\widgets\ActiveForm;
+use yii\bootstrap4\LinkPager;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\SupplierSearch */
@@ -32,6 +33,8 @@ $GridViewJs = <<<JS
    var select_ids_length = $("#grid").yiiGridView("getSelectedRows").length;
    if(select_ids_length >0){
       $(".doExport").removeClass("disabled")
+   }else {
+       $(".doExport").addClass("disabled")
    }
   })
 $(".select-on-check-all").on("click", function () {
@@ -85,7 +88,7 @@ $this->registerJs($GridViewJs);
             ],
         ],
     ]); ?>
-    <?= \yii\bootstrap4\LinkPager::widget([
+    <?= LinkPager::widget([
         'pagination' => $pages,
         'options' => ['class' => 'm-pagination'],
     ]); ?>
@@ -96,7 +99,7 @@ $this->registerJs($GridViewJs);
 Modal::begin([
     'id' => 'create-modal',
     'title' =>'Which columns do you want?',
-    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+    'footer' => '<a href="#" class="btn" data-dismiss="modal">Close</a>
                 <a href="#" class="btn btn-primary doExport disabled" data-dismiss="modal">Submit</a>',
 ]);
 ?>
@@ -107,7 +110,6 @@ Modal::begin([
 ]);
 $modalJs = <<<JS
    $(".doExport").on("click", function () {
-//注意这里的$("#grid")，要跟我们第一步设定的options id一致
     var select_ids = $("#grid").yiiGridView("getSelectedRows");
     var chk_value=[];
 　　$('input[name="fields"]:checked').each(function(){
